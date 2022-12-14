@@ -11,7 +11,6 @@ library(performance)
 library(report)
 library(see)
 
-startTime <- Sys.time()
 
 # set proper contrast method ----
 options(contrasts = c("contr.helmert", "contr.poly")) # SPSS contrast method
@@ -540,9 +539,3 @@ fbmpPlot <- fbmp %>% plot() +
     theme(axis.text=element_text(size = 15))
 
 # ggsave(filename = "plots/fbModelPlot.png", fbmpPlot, dpi = 142, units = "px", width = 800, height = 1000)
-
-endTime <- Sys.time()
-
-elapsed <- endTime - startTime
-
-elapsed
