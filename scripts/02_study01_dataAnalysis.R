@@ -7,9 +7,7 @@ library(cowplot)
 library(corrplot)
 library(lme4)
 library(datawizard)
-library(parameters)
 library(effectsize)
-
 
 # set proper contrast method ----
 options(contrasts = c("contr.helmert", "contr.poly")) # SPSS contrast method
