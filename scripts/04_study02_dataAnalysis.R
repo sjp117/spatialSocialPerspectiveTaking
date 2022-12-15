@@ -20,15 +20,17 @@ options("contrasts")
 
 # import data ----
 
-data1 <- read.csv("data/cleanData.csv")
+data1 <- read.csv("data/study02_cleanData.csv")
 
-# set id as factor
+# set variables as factor
+
 data1$id <- as.factor(data1$id)
 
-# set gender as factor
 data1$gender <- as.factor(data1$gender)
 
 data1$location <- as.factor(data1$location)
+
+
 
 # standardize variables ----
 

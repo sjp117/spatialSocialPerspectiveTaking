@@ -1,8 +1,19 @@
 # import packages ----
-library(tidyverse)
+library(dplyr)
+library(tidyr)
 library(circular)
 
 # helper functions ----
+
+# function for reverse coding Likert scales
+# given a Likert score and the range of the Likert scale, return the reversed score
+# input: a = Likert score (integer)
+#        b = range of the Likert scale (integer)
+# output: reversed Likert score
+revCode <- function(a, b) {
+    result = (b + 1) - a
+    return(result)
+}
 
 # function for angular distance
 # calculate distance between angles with sign (- is left of reference)
@@ -24,21 +35,20 @@ distanceAng <- function (a, b) {
 ## import online data ----
 
 # read only the first row and saves it with a name "header"
-header01 <- read.csv("data/onlineData20220211.csv", header = F, nrows = 1)
+header01 <- read.csv("data/study02_OnlineData20220211.csv", header = F, nrows = 1)
 
 # read the whole data excluding the first three rows and names it "data01"
-data01 <- read.csv("data/onlineData20220211.csv", header = F, skip = 7)
+data01 <- read.csv("data/study02_OnlineData20220211.csv", header = F, skip = 7, col.names = header01)
 
-# assign column names to "data01" using the header data
 colnames(data01) <- header01
 
 ## import in-person data ----
 
 # read only the first row and saves it with a name "header"
-header02 <- read.csv("data/inPersonData_20220204.csv", header = F, nrows = 1)
+header02 <- read.csv("data/study02_InPersonData20220204.csv", header = F, nrows = 1)
 
 # read the whole data excluding the first three rows and names it "data01"
-data02 <- read.csv("data/inPersonData_20220204.csv", header = F, skip = 8)
+data02 <- read.csv("data/study02_InPersonData20220204.csv", header = F, skip = 8)
 
 # assign column names to "data01" using the header data
 colnames(data02) <- header02
@@ -397,36 +407,36 @@ combDat <- combDat %>%
 ### reverse code ----
 combDat <- combDat %>%
     mutate(
-        bigFiveF_1_3C	= 5 - bigFiveF_1_3 + 1,
-        bigFiveF_1_4C	= 5 - bigFiveF_1_4 + 1,
-        bigFiveF_1_5C	= 5 - bigFiveF_1_5 + 1,
-        bigFiveF_1_8C	= 5 - bigFiveF_1_8 + 1,
-        bigFiveF_1_9C	= 5 - bigFiveF_1_9 + 1,
-        bigFiveF_2_2C	= 5 - bigFiveF_2_2 + 1,
-        bigFiveF_2_3C	= 5 - bigFiveF_2_3 + 1,
-        bigFiveF_2_7C	= 5 - bigFiveF_2_7 + 1,
-        bigFiveF_2_8C	= 5 - bigFiveF_2_8 + 1,
-        bigFiveF_3_4C	= 5 - bigFiveF_3_4 + 1,
-        bigFiveF_3_5C	= 5 - bigFiveF_3_5 + 1,
-        bigFiveF_3_6C	= 5 - bigFiveF_3_6 + 1,
-        bigFiveF_3_7C	= 5 - bigFiveF_3_7 + 1,
-        bigFiveF_3_8C	= 5 - bigFiveF_3_8 + 1,
-        bigFiveF_4_1C	= 5 - bigFiveF_4_1 + 1,
-        bigFiveF_4_2C	= 5 - bigFiveF_4_2 + 1,
-        bigFiveF_4_3C	= 5 - bigFiveF_4_3 + 1,
-        bigFiveF_4_4C	= 5 - bigFiveF_4_4 + 1,
-        bigFiveF_4_9C	= 5 - bigFiveF_4_9 + 1,
-        bigFiveF_5_1C	= 5 - bigFiveF_5_1 + 1,
-        bigFiveF_5_6C	= 5 - bigFiveF_5_6 + 1,
-        bigFiveF_5_8C	= 5 - bigFiveF_5_8 + 1,
-        bigFiveF_5_9C	= 5 - bigFiveF_5_9 + 1,
-        bigFiveF_6_2C	= 5 - bigFiveF_6_2 + 1,
-        bigFiveF_6_3C	= 5 - bigFiveF_6_3 + 1,
-        bigFiveF_6_4C	= 5 - bigFiveF_6_4 + 1,
-        bigFiveF_6_5C	= 5 - bigFiveF_6_5 + 1,
-        bigFiveF_6_6C	= 5 - bigFiveF_6_6 + 1,
-        bigFiveF_7_1C	= 5 - bigFiveF_7_1 + 1,
-        bigFiveF_7_4C	= 5 - bigFiveF_7_4 + 1
+        bigFiveF_1_3C	= revCode(bigFiveF_1_3, 5),
+        bigFiveF_1_4C	= revCode(bigFiveF_1_4, 5),
+        bigFiveF_1_5C	= revCode(bigFiveF_1_5, 5),
+        bigFiveF_1_8C	= revCode(bigFiveF_1_8, 5),
+        bigFiveF_1_9C	= revCode(bigFiveF_1_9, 5),
+        bigFiveF_2_2C	= revCode(bigFiveF_2_2, 5),
+        bigFiveF_2_3C	= revCode(bigFiveF_2_3, 5),
+        bigFiveF_2_7C	= revCode(bigFiveF_2_7, 5),
+        bigFiveF_2_8C	= revCode(bigFiveF_2_8, 5),
+        bigFiveF_3_4C	= revCode(bigFiveF_3_4, 5),
+        bigFiveF_3_5C	= revCode(bigFiveF_3_5, 5),
+        bigFiveF_3_6C	= revCode(bigFiveF_3_6, 5),
+        bigFiveF_3_7C	= revCode(bigFiveF_3_7, 5),
+        bigFiveF_3_8C	= revCode(bigFiveF_3_8, 5),
+        bigFiveF_4_1C	= revCode(bigFiveF_4_1, 5),
+        bigFiveF_4_2C	= revCode(bigFiveF_4_2, 5),
+        bigFiveF_4_3C	= revCode(bigFiveF_4_3, 5),
+        bigFiveF_4_4C	= revCode(bigFiveF_4_4, 5),
+        bigFiveF_4_9C	= revCode(bigFiveF_4_9, 5),
+        bigFiveF_5_1C	= revCode(bigFiveF_5_1, 5),
+        bigFiveF_5_6C	= revCode(bigFiveF_5_6, 5),
+        bigFiveF_5_8C	= revCode(bigFiveF_5_8, 5),
+        bigFiveF_5_9C	= revCode(bigFiveF_5_9, 5),
+        bigFiveF_6_2C	= revCode(bigFiveF_6_2, 5),
+        bigFiveF_6_3C	= revCode(bigFiveF_6_3, 5),
+        bigFiveF_6_4C	= revCode(bigFiveF_6_4, 5),
+        bigFiveF_6_5C	= revCode(bigFiveF_6_5, 5),
+        bigFiveF_6_6C	= revCode(bigFiveF_6_6, 5),
+        bigFiveF_7_1C	= revCode(bigFiveF_7_1, 5),
+        bigFiveF_7_4C	= revCode(bigFiveF_7_4, 5),
     )
 
 ### add sub-facet variables ----
@@ -526,4 +536,4 @@ cleanData <- combDat %>%
 
 # Export clean data ----
 
-write.csv(cleanData, file = "data/cleanData.csv", row.names = F)
+write.csv(cleanData, file = "data/study02_cleanData.csv", row.names = F)
