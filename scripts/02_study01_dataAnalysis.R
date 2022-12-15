@@ -36,7 +36,7 @@ wilcox.test(data1$PTOprop, data1$PTSprop, paired = T)
 
 ### Figure B.4 ----
 
-data1 %>%
+ptviolin <- data1 %>%
     pivot_longer(cols = c(PTOprop, PTSprop), names_to = "Perspective", values_to = "Score") %>%
     mutate(Perspective = factor(Perspective, labels = c("Other", "Self"))) %>%
     ggplot(aes(x = Perspective, y = Score, fill = Perspective)) +
@@ -49,6 +49,11 @@ data1 %>%
     theme_pubr() +
     theme(text=element_text(size = 20), legend.position="none")
 
+ptviolin
+
+# ggsave(filename = "plots/study1PTviolin.png", plot = ptviolin, units = "px", dpi = 100,
+#        width = 900, height = 800)
+
 ## False Belief *----
 
 wilcox.test(data1$FBOtotal, data1$FBStotal, paired = T, alternative = "two.sided")
@@ -56,7 +61,7 @@ wilcox.test(data1$FBOtotal, data1$FBStotal, paired = T, alternative = "two.sided
 
 ### Figure B.5 ----
 
-data1 %>%
+fbviolin <- data1 %>%
     pivot_longer(cols = c(FBOprop, FBSprop), names_to = "Perspective", values_to = "Score") %>%
     mutate(Perspective = factor(Perspective, labels = c("Other", "Self"))) %>%
     ggplot(aes(x = Perspective, y = Score, fill = Perspective)) +
@@ -68,7 +73,14 @@ data1 %>%
     theme_pubr() +
     theme(text=element_text(size = 20), legend.position="none")
 
-## Indivisual Differences ----
+fbviolin
+
+# mistake in original plot, perspective condition was swapped.
+
+# ggsave(filename = "plots/study1FBviolin.png", plot = fbviolin, units = "px", dpi = 100,
+#        width = 900, height = 800)
+
+## Individual Differences ----
 
 indDat <- data1 %>%
     select('Openness' = bigFiveF_O, 'Conscientiousness' = bigFiveF_C, 
@@ -77,10 +89,10 @@ indDat <- data1 %>%
            'Spatial Anxiety' = SAQ_Total, Vividness = VVIQtotal)
 
 ### Figure B.6 ----
-indDat %>%
+qqplot <- indDat %>%
+    mutate_all(scale) %>%
     pivot_longer(cols = everything(), names_to = "Variable", values_to = "Score") %>%
-    mutate(Variable = factor(Variable, levels = colnames(indDat)),
-           Score = standardize(Score)) %>%
+    mutate(Variable = factor(Variable, levels = colnames(indDat))) %>%
     ggplot(aes(sample = Score, color = Variable)) +
     stat_qq() +
     stat_qq_line(color = "black") +
@@ -89,7 +101,12 @@ indDat %>%
     scale_color_brewer(palette="Dark2") +
     ylab(label = "Standardized Sample Quantiles") +
     xlab(label = "Theoretical Quantiles") +
-    theme(text=element_text(size = 20), legend.position="none")
+    theme(text=element_text(size = 15), legend.position="none")
+
+qqplot
+
+# ggsave(filename = "plots/study1qqplot.png", plot = qqplot, units = "px", dpi = 100,
+#        width = 1000, height = 900)
 
 # Task Order ----
 
@@ -145,6 +162,9 @@ corrdf <- data1 %>%
 corMat <- cor(corrdf, method = "pearson")
 corRes <- cor.mtest(corrdf)
 
+# # start export plot
+# png(filename = "plots/study1CorMat.png", width = 1200, height = 900, res = 100)
+
 corrplot(corMat,
          method = "color",
          type = "upper",
@@ -158,9 +178,12 @@ corrplot(corMat,
          tl.cex = 1.45,
          tl.col = "black")
 
+# # end export plot
+# dev.off()
+
 ### Figure B.8 ----
 
-data1 %>%
+scatterplt <- data1 %>%
     ggplot(aes(x = PTOtotal, y = FBOtotal)) +
     geom_jitter(width = .1, height = .1, size = 3, alpha = 0.2) +
     geom_smooth(method = "lm", color = "black") +
@@ -176,6 +199,10 @@ data1 %>%
     theme_pubr() +
     theme(plot.title = element_text(hjust = 0.5), text = element_text(size = 15))
 
+scatterplt
+
+# ggsave(filename = "plots/study1ScatterPlot.png", scatterplt, dpi = 100,
+#        units = "px", width = 800, height = 700)
 
 # Regression ----
 
@@ -310,7 +337,12 @@ fbplot
 
 # combine plots 
 
-plot_grid(ptplot, fbplot, labels = NA,
-          rel_widths = c(1.4,1))
+regplot <- plot_grid(ptplot, fbplot, labels = NA,
+                     rel_widths = c(1.4,1))
+
+regplot
+
+# ggsave(filename = "plots/study1RegDotWhiskersPlot.png", regplot, dpi = 100,
+#        units = "px", width = 1000, height = 800)
 
 # models do not replicate, but follow similar trend.

@@ -2,5 +2,6 @@
 .Rhistory
 .RData
 .Ruserdata
-# ignore data directory content
+# ignore directory content
 data/*
+docs/*

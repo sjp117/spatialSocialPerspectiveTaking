@@ -90,15 +90,20 @@ boxplot(PTStotal ~ location, data = data1, frame = FALSE,
         xlab = "Location")
 
 ### Figure B.16 ----
-data1 %>%
+ptLocPlt <- data1 %>%
     mutate(location = factor(location, labels = c("In-Person", "Remote"))) %>%
     ggplot(aes(x = location, y = PTOtotal / 30)) +
     geom_violin() +
     geom_jitter(width = 0.1, height = 0, alpha = 0.3, size = 3) +
     geom_hline(yintercept = 0.5, linetype = 'dashed', linewidth = 1) +
     theme_pubr() +
-    ylab(label = "Score Proportion") +
+    labs(x = "Location", y = "Score Proportion") +
     theme(text=element_text(size = 20), legend.position="none")
+
+ptLocPlt
+
+# ggsave(filename = "plots/study2PTLocViolin.png", plot = ptLocPlt, units = "px", dpi = 100,
+#        width = 1000, height = 800)
 
 ## SO Task * ----
 
@@ -112,16 +117,20 @@ boxplot(angDivMean ~ location, data = data1, frame = FALSE,
         xlab = "Location")
 
 ### Figure B.17 ----
-data1 %>%
+soLocPlt <- data1 %>%
     mutate(location = factor(location, labels = c("In-Person", "Remote"))) %>%
     ggplot(aes(x = location, y = angDivMean)) +
     geom_boxplot(outlier.colour = NA) +
     geom_jitter(width = 0.05, height = 0, alpha = 0.3, size = 3) +
-    ylim(c(0,NA)) +
-    scale_y_continuous(n.breaks = 10) +
+    scale_y_continuous(n.breaks = 10, limits = c(0, NA)) +
     theme_pubr() +
     ylab(label = "Score Proportion") +
     theme(text=element_text(size = 20), legend.position="none")
+
+soLocPlt
+
+# ggsave(filename = "plots/study2SOLocViolin.png", plot = soLocPlt, units = "px", dpi = 100,
+#        width = 1000, height = 800)
 
 ## False Belief ----
 
@@ -168,10 +177,10 @@ indDat <- data1 %>%
            'Neuroticism' = bigFiveF_N, 'Anxiety Symptoms' = ASQ_Total,
            'Spatial Anxiety' = SAQ_Total)
 
-indDat %>%
+qqplot <- indDat %>%
+    mutate_all(scale) %>%
     pivot_longer(cols = everything(), names_to = "Variable", values_to = "Score") %>%
-    mutate(Variable = factor(Variable, levels = colnames(indDat)),
-           Score = standardize(Score)) %>%
+    mutate(Variable = factor(Variable, levels = colnames(indDat))) %>%
     ggplot(aes(sample = Score, color = Variable)) +
     stat_qq() +
     stat_qq_line(color = "black") +
@@ -180,7 +189,12 @@ indDat %>%
     scale_color_brewer(palette="Dark2") +
     ylab(label = "Standardized Sample Quantiles") +
     xlab(label = "Theoretical Quantiles") +
-    theme(text=element_text(size = 20), legend.position="none")
+    theme(text=element_text(size = 15), legend.position="none")
+
+qqplot
+
+# ggsave(filename = "plots/study2qqplot.png", plot = qqplot, units = "px", dpi = 100,
+#        width = 1000, height = 900)
 
 # Agreeableness is the only personality different between location
 # alpha Bonferroni adjusted for 5 tests (0.05/5 = 0.01)
@@ -221,7 +235,7 @@ wilcox.test(Score ~ Perspective, data = ptdata)
 ### plot ----
 
 #### Figure B.13 ----
-ptdata %>%
+ptPerspPlt <- ptdata %>%
     mutate(Score = ifelse(Perspective == "PTOtotal", Score/30, Score/15)) %>%
     mutate(Perspective = factor(Perspective, labels = c("Other", "Self"))) %>%
     ggplot(aes(x = Perspective, y = Score, fill = Perspective)) +
@@ -231,6 +245,11 @@ ptdata %>%
     theme_pubr() +
     ylab(label = "Score Proportion") +
     theme(text=element_text(size = 20), legend.position="none")
+
+ptPerspPlt
+
+# ggsave(filename = "plots/study2PTPerspViolin.png", plot = ptPerspPlt, units = "px", dpi = 100,
+#        width = 1000, height = 800)
 
 ## False Belief * ----
 
@@ -245,7 +264,7 @@ wilcox.test(Score ~ Perspective, data = fbdata)
 ### plot ----
 
 #### Figure B.14 ----
-fbdata %>%
+fbPerspPlt <- fbdata %>%
     mutate(Score = Score / 6) %>%
     mutate(Perspective = factor(Perspective, labels = c("Other", "Self"))) %>%
     ggplot(aes(x = Perspective, y = Score, fill = Perspective)) +
@@ -256,6 +275,11 @@ fbdata %>%
     theme_pubr() +
     ylab(label = "Score Proportion") +
     theme(text=element_text(size = 20), legend.position="none")
+
+fbPerspPlt
+
+# ggsave(filename = "plots/study2FBPerspViolin.png", plot = fbPerspPlt, units = "px", dpi = 100,
+#        width = 1000, height = 800)
 
 # Correlations ----
 
@@ -271,6 +295,9 @@ corRes1 <- cor.mtest(corrdf1)
 
 ### Figure B.18 ----
 
+# # start export plot
+# png(filename = "plots/study2CorMat.png", width = 1200, height = 900, res = 100)
+
 corrplot(corMat1,
          method = "color",
          type = "upper",
@@ -283,6 +310,9 @@ corrplot(corMat1,
          tl.offset= 0.6,
          tl.cex = 1.45,
          tl.col = "black")
+
+# # end export plot
+# dev.off()
 
 ### SO Vs 3D Other * ----
 
@@ -322,6 +352,9 @@ corRes2 <- cor.mtest(corrdf2)
 
 ### Figure B.19 ----
 
+# # start export plot
+# png(filename = "plots/study2CorMatIP.png", width = 1200, height = 900, res = 100)
+
 corrplot(corMat2,
          method = "color",
          type = "upper",
@@ -334,6 +367,9 @@ corrplot(corMat2,
          tl.offset= 0.6,
          tl.cex = 1.45,
          tl.col = "black")
+
+# # end export plot
+# dev.off()
 
 ## Remote ----
 
@@ -350,6 +386,9 @@ corRes3 <- cor.mtest(corrdf3)
 
 ### Figure B.20 ----
 
+# # start export plot
+# png(filename = "plots/study2CorMatRm.png", width = 1200, height = 900, res = 100)
+
 corrplot(corMat3,
          method = "color",
          type = "upper",
@@ -363,6 +402,9 @@ corrplot(corMat3,
          tl.cex = 1.45,
          tl.col = "black")
 
+# # end export plot
+# dev.off()
+
 ### Figure B.24 ----
 
 corrdf4 <- data1 %>%
@@ -372,7 +414,7 @@ corrdf4 <- data1 %>%
            "Social (Other)" = FB_Total, "Social (Self)" = FB_Control_Total) %>%
     mutate(location = factor(location, labels = c("In-Person", "Remote")))
 
-corrdf4 %>%
+ptfbScatter <- corrdf4 %>%
     ggplot(aes(y = `Social (Other)`, x = `3D (Other)`)) +
     geom_jitter(width = 0, height = .1, size = 3, alpha = 0.2) +
     geom_smooth(method = "lm", color = "blue") +
@@ -387,6 +429,11 @@ corrdf4 %>%
     theme_pubr() +
     theme(plot.title = element_text(hjust = 0.5), text = element_text(size = 15)) +
     facet_grid(~location)
+
+ptfbScatter
+
+# ggsave(filename = "plots/study2PTFBScatter.png", plot = ptfbScatter, units = "px", dpi = 100,
+#        width = 1200, height = 800)
 
 # Regression ----
 
@@ -408,7 +455,8 @@ ptMod <- ptLong %>%
 
 summary(ptMod)
 
-ptfitTest <- allFit(ptMod)
+# # test model
+# ptfitTest <- allFit(ptMod)
 
 ### get R2 ----
 r2_nakagawa(ptMod)
@@ -433,7 +481,9 @@ ptmpPlot <- ptmp %>% plot() +
                                     "ASQS","persp1:ASQS","SAQS","persp1:SAQS"))) +
     theme(axis.text=element_text(size = 15))
 
-ggsave(filename = "plots/ptModelPlot.png", ptmpPlot, dpi = 142, units = "px", width = 800, height = 1000)
+ptmpPlot
+
+# ggsave(filename = "plots/study2PTModelPlot.png", ptmpPlot, dpi = 142, units = "px", width = 800, height = 1000)
 
 ## SO Task ----
 
@@ -455,7 +505,8 @@ sogmod <- sodata %>%
 
 summary(sogmod)
 
-sofitTest <- allFit(sogmod)
+# # test model
+# sofitTest <- allFit(sogmod)
 
 #### get R2 ----
 r2_nakagawa(sogmod)
@@ -479,7 +530,9 @@ sompPlot <- somp %>% plot() +
     scale_x_continuous(n.breaks = 10) +
     theme(axis.text=element_text(size = 15))
 
-# ggsave(filename = "plots/soModelPlot.png", sompPlot, dpi = 142, units = "px", width = 800, height = 1000)
+sompPlot
+
+# ggsave(filename = "plots/study2SOModelPlot.png", sompPlot, dpi = 142, units = "px", width = 800, height = 1000)
 
 ## False Belief ----
 
@@ -512,7 +565,8 @@ fbmod <- fbdata %>%
 
 summary(fbmod)
 
-fbfitTest <- allFit(fbmod)
+# # test model
+# fbfitTest <- allFit(fbmod)
 
 ### get R2 ----
 r2_nakagawa(fbmod)
@@ -540,4 +594,6 @@ fbmpPlot <- fbmp %>% plot() +
     scale_x_continuous(breaks = seq(-0.06, 0.06,0.02)) +
     theme(axis.text=element_text(size = 15))
 
-# ggsave(filename = "plots/fbModelPlot.png", fbmpPlot, dpi = 142, units = "px", width = 800, height = 1000)
+fbmpPlot
+
+# ggsave(filename = "plots/study2FBModelPlot.png", fbmpPlot, dpi = 142, units = "px", width = 800, height = 1000)
