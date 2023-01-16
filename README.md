@@ -30,4 +30,4 @@ If you have questions about any part of this project, feel free to contact me vi
 ## References
 Part of this project can be found on:
 
-    Park, S., Watanabe, B. K, & Burte, H. (2022). Perspective taking and reference frames for spatial and social cognition. Proceedings of the Annual Meeting of the Cognitive Science Society, 44. Retrieved from https://escholarship.org/uc/item/6wq5x6nn
+>Park, S., Watanabe, B. K, & Burte, H. (2022). Perspective taking and reference frames for spatial and social cognition. Proceedings of the Annual Meeting of the Cognitive Science Society, 44. Retrieved from https://escholarship.org/uc/item/6wq5x6nn
