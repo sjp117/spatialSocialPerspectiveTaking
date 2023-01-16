@@ -3,7 +3,9 @@
 ## About
 This repository contains the R scripts and plots pertaining the my Masters in psychological sciences research project from Texas A&M University.
 
-## Abstract (from thesis)
+## Abstract
+(From thsis)
+
 Perspective taking is a versatile ability that helps us examine both 
 the spatial and social qualities of things. We take perspectives because it is 
 adaptable to consider both the physical and abstract qualities of objects and 
