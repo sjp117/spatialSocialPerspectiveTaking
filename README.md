@@ -4,7 +4,6 @@
 This repository contains the R scripts and plots pertaining the my Masters in psychological sciences research project from Texas A&M University.
 
 ## Abstract (from thesis)
-
 Perspective taking is a versatile ability that helps us examine both 
 the spatial and social qualities of things. We take perspectives because it is 
 adaptable to consider both the physical and abstract qualities of objects and 
@@ -24,3 +23,11 @@ personality trait that predicted better spatial and social perspective taking
 abilities. This suggests that both spatial and social concepts are represented 
 and processed in similar ways, bridging our understanding of these two 
 functions of cognition.
+
+## Contact
+If you have questions about any part of this project, feel free to contact me via my github contact information.
+
+## References
+Part of this project can be found on:
+
+    Park, S., Watanabe, B. K, & Burte, H. (2022). Perspective taking and reference frames for spatial and social cognition. Proceedings of the Annual Meeting of the Cognitive Science Society, 44. Retrieved from https://escholarship.org/uc/item/6wq5x6nn
